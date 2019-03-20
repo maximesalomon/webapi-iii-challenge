@@ -27,16 +27,15 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-
     const posts = await postDb.insert(req.body);
     const content = await postDb.getById(posts.id)
-    if (content[0].title && content[0].contents) {
-      res.status(201).json(req.body);
+    if (content.user_id && content.text) {
+        res.status(201).json(req.body);
     } else {
-      res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+        res.status(400).json({ errorMessage: "Please provide user_id and text for the post." })
     }
   } catch (error) {
-    res.status(500).json({ error: "There was an error while saving the post to the database" });
+        res.status(500).json({ error: "There was an error while saving the post to the database" });
   }
 });
 
@@ -60,10 +59,10 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const post = await postDb.update(req.params.id, req.body);
-    if (req.body.title && req.body.contents) {
+    if (req.body.user_id && req.body.text) {
       res.status(200).json(req.body);
     } else {
-      res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+      res.status(400).json({ errorMessage: "Please provide user_id and text for the post." })
     }
   } catch (error) {
     res.status(500).json({ error: "The post information could not be modified." });
