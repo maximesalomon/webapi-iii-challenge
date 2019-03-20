@@ -39,7 +39,12 @@ router.get('/:id/posts', async (req, res) => {
     }
   });
 
-router.post('/', async (req, res) => {
+function upperCase(req, res, next) {
+  req.body.name = req.body.name.toUpperCase();
+  next();
+}
+
+router.post('/', upperCase, async (req, res) => {
   try {
     const users = await userDb.insert(req.body);
     const content = await userDb.getById(users.id)
